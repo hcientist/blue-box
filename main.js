@@ -7,6 +7,8 @@ let audioCtx = null;
 let gainNode = null;
 let stream = null;
 let sourceNode = null;
+let destNode = null;
+let audioEl = null;
 
 gainSlider.addEventListener("input", () => {
   const val = parseFloat(gainSlider.value);
@@ -33,7 +35,6 @@ async function start() {
         echoCancellation: false,
         noiseSuppression: false,
         autoGainControl: false,
-        latencyHint: "interactive",
       },
     });
 
@@ -48,8 +49,15 @@ async function start() {
     gainNode = audioCtx.createGain();
     gainNode.gain.value = parseFloat(gainSlider.value);
 
+    // Route through a MediaStream destination and play via <audio> element
+    // so the OS treats this as media playback and routes to Bluetooth
+    destNode = audioCtx.createMediaStreamDestination();
     sourceNode.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
+    gainNode.connect(destNode);
+
+    audioEl = new Audio();
+    audioEl.srcObject = destNode.stream;
+    audioEl.play();
 
     toggleBtn.textContent = "Stop";
     toggleBtn.classList.add("active");
@@ -61,6 +69,11 @@ async function start() {
 }
 
 function stop() {
+  if (audioEl) {
+    audioEl.pause();
+    audioEl.srcObject = null;
+    audioEl = null;
+  }
   if (sourceNode) {
     sourceNode.disconnect();
     sourceNode = null;
@@ -68,6 +81,9 @@ function stop() {
   if (gainNode) {
     gainNode.disconnect();
     gainNode = null;
+  }
+  if (destNode) {
+    destNode = null;
   }
   if (audioCtx) {
     audioCtx.close();

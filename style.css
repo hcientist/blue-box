@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -5,9 +7,9 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #0a0a1a;
-  color: #e0e0e0;
+  font-family: "Lilita One", Impact, sans-serif;
+  background: #1a3b8a;
+  color: #fef4e0;
   min-height: 100dvh;
   display: flex;
   align-items: center;
@@ -24,26 +26,33 @@ body {
 }
 
 h1 {
-  font-size: 2rem;
-  color: #4a9eff;
-  margin-bottom: 0.25rem;
+  font-size: 2.6rem;
+  color: #ffc220;
+  margin-bottom: 0.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-shadow: 2px 2px 0 #c43e1c;
 }
 
 .subtitle {
-  color: #888;
+  color: #fef4e0;
   margin-bottom: 2.5rem;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  opacity: 0.7;
+  letter-spacing: 0.05em;
 }
 
 .btn {
-  width: 140px;
-  height: 140px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  border: 3px solid #4a9eff;
+  border: 4px solid #ffc220;
   background: transparent;
-  color: #4a9eff;
-  font-size: 1.3rem;
-  font-weight: 600;
+  color: #ffc220;
+  font-family: "Lilita One", Impact, sans-serif;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   cursor: pointer;
   transition: all 0.2s;
   -webkit-tap-highlight-color: transparent;
@@ -54,9 +63,9 @@ h1 {
 }
 
 .btn.active {
-  background: #4a9eff;
-  color: #0a0a1a;
-  box-shadow: 0 0 40px rgba(74, 158, 255, 0.4);
+  background: #ffc220;
+  color: #1a3b8a;
+  box-shadow: 0 0 50px rgba(255, 194, 32, 0.45);
 }
 
 .controls {
@@ -67,26 +76,28 @@ h1 {
 }
 
 .controls label {
-  font-size: 0.85rem;
-  color: #888;
+  font-size: 0.95rem;
+  color: #fef4e0;
+  opacity: 0.7;
   flex-shrink: 0;
 }
 
 .controls input[type="range"] {
   flex: 1;
-  accent-color: #4a9eff;
+  accent-color: #ffc220;
   height: 6px;
 }
 
 #gain-value {
-  font-size: 0.85rem;
-  color: #888;
+  font-size: 0.95rem;
+  color: #ffc220;
   min-width: 3ch;
 }
 
 .status {
   margin-top: 2rem;
-  font-size: 0.85rem;
-  color: #666;
+  font-size: 0.9rem;
+  color: #fef4e0;
+  opacity: 0.5;
   min-height: 1.2em;
 }
