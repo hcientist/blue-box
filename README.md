@@ -4,7 +4,7 @@ A minimal web app that streams your microphone directly to your speaker output i
 
 ## Usage
 
-1. Open the app (hosted on [GitHub Pages](https://tgm.github.io/blue-box/) or run locally)
+1. Open the app (hosted on [GitHub Pages](https://hcientist.github.io/blue-box/) or run locally)
 2. Tap **Start** to begin streaming
 3. Adjust the **Volume** slider (0x – 3x)
 4. Tap **Stop** to end

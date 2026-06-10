@@ -30,6 +30,23 @@ async function start() {
   try {
     status.textContent = "Requesting microphone...";
 
+    // First, establish a media playback audio session BEFORE opening the mic.
+    // This primes iOS to use the media route (speaker/Bluetooth) instead of
+    // the voice call route (earpiece) that getUserMedia forces.
+    audioCtx = new AudioContext({ latencyHint: "interactive" });
+
+    // Play a short silent buffer to establish the media audio session
+    const silentBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.1, audioCtx.sampleRate);
+    const silentSource = audioCtx.createBufferSource();
+    silentSource.buffer = silentBuffer;
+    silentSource.connect(audioCtx.destination);
+    silentSource.start();
+
+    if (audioCtx.state === "suspended") {
+      await audioCtx.resume();
+    }
+
+    // Now request mic — the audio session is already in media mode
     stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         echoCancellation: false,
@@ -37,13 +54,6 @@ async function start() {
         autoGainControl: false,
       },
     });
-
-    audioCtx = new AudioContext({ latencyHint: "interactive" });
-
-    // Resume context (required on mobile after user gesture)
-    if (audioCtx.state === "suspended") {
-      await audioCtx.resume();
-    }
 
     sourceNode = audioCtx.createMediaStreamSource(stream);
     gainNode = audioCtx.createGain();
@@ -55,9 +65,15 @@ async function start() {
     sourceNode.connect(gainNode);
     gainNode.connect(destNode);
 
-    audioEl = new Audio();
+    // Also connect to audioCtx.destination as a fallback
+    gainNode.connect(audioCtx.destination);
+
+    // Play through an <audio> element in the DOM for OS media routing
+    audioEl = document.createElement("audio");
+    audioEl.setAttribute("playsinline", "");
     audioEl.srcObject = destNode.stream;
-    audioEl.play();
+    document.body.appendChild(audioEl);
+    await audioEl.play();
 
     toggleBtn.textContent = "Stop";
     toggleBtn.classList.add("active");
@@ -72,6 +88,7 @@ function stop() {
   if (audioEl) {
     audioEl.pause();
     audioEl.srcObject = null;
+    audioEl.remove();
     audioEl = null;
   }
   if (sourceNode) {
